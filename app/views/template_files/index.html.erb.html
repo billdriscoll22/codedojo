@@ -1,0 +1,27 @@
+<h1>Listing template_files</h1>
+
+<table>
+  <tr>
+    <th>File name</th>
+    <th>Exercise</th>
+    <th>Content</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @template_files.each do |template_file| %>
+  <tr>
+    <td><%= template_file.file_name %></td>
+    <td><%= template_file.exercise_id %></td>
+    <td><%= template_file.content %></td>
+    <td><%= link_to 'Show', template_file %></td>
+    <td><%= link_to 'Edit', edit_template_file_path(template_file) %></td>
+    <td><%= link_to 'Destroy', template_file, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Template file', new_template_file_path %>

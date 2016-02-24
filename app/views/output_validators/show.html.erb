@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Args:</b>
+  <%= @output_validator.args %>
+</p>
+
+<p>
+  <b>Exercise:</b>
+  <%= @output_validator.exercise_id %>
+</p>
+
+<p>
+  <b>Validator:</b>
+  <%= @output_validator.validator %>
+</p>
+
+
+<%= link_to 'Edit', edit_output_validator_path(@output_validator) %> |
+<%= link_to 'Back', output_validators_path %>

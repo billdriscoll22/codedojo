@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>CodeDojo test</title>
+<link rel="stylesheet" href="/css/codedojo-bootstrap.css" media="screen">
+<link rel="stylesheet" href="/css/codemirror.css">
+<link rel="stylesheet" href="/css/theme/solarized.css">
+<link rel="stylesheet" href="/css/codedojo-editor.css">
+<link rel="stylesheet" href="/css/ansi.css">
+<script src="/js/codemirror.js"></script>
+<script src="/js/codemirror/active-line.js"></script>
+<script src="/js/codemirror/closebrackets.js"></script>
+<script src="/js/codemirror/continuecomment.js"></script>
+<script src="/js/codemirror/matchbrackets.js"></script>
+<script src="/js/clike.js"></script>
+<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/jquery-migrate.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/jqconsole.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/codedojo-editor.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  <textarea rows="20" cols="80" name="usercode" id="usercode_textarea">
+  </textarea>
+<div class="row-fluid console-row-fluid">
+<div id="console-wrapper">
+ <div id="console" class="codedojo-console span10"></div>
+ <div class="codedojo-buttons span2">
+  <button type="button" class="editor-button btn btn-primary" id="compileButton" value="Compile!">Compile and run!</button>
+  <br />
+  <button type="button" class="editor-button btn btn-danger" id="termButton" disabled="true" value="Terminate!">Terminate!</button>
+  <br />
+  <button type="button" class="editor-button btn" id="clearButton" value="Clear console!">Clear console!</button>
+  <br />
+ </div>
+</div>
+</div>
+</body>
+</html>

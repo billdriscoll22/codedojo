@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>File name:</b>
+  <%= @test_file.file_name %>
+</p>
+
+<p>
+  <b>Exercise:</b>
+  <%= @test_file.exercise_id %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @test_file.content %>
+</p>
+
+
+<%= link_to 'Edit', edit_test_file_path(@test_file) %> |
+<%= link_to 'Back', test_files_path %>

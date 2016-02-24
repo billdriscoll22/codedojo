@@ -1,0 +1,30 @@
+<%= form_for(@result) do |f| %>
+  <% if @result.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@result.errors.count, "error") %> prohibited this result from being saved:</h2>
+
+      <ul>
+      <% @result.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :exercise_id %><br />
+    <%= f.number_field :exercise_id %>
+  </div>
+  <div class="field">
+    <%= f.label :is_correct %><br />
+    <%= f.radio_button :is_correct, "0" %>false
+		<%= f.radio_button :is_correct, "1" %>true
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

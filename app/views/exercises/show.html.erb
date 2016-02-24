@@ -1,0 +1,99 @@
+<script type="text/javascript">
+var CDGlobals = {};
+CDGlobals.exercise_id = <%= @exercise.id  %>;
+CDGlobals.isLoggedIn = <%= signed_in? %>;
+CDGlobals.exerciseCorrect = <%= @exercise_correct %>;
+CDGlobals.projType = '<%= @exercise.proj_type %>';
+window.CDGlobals = CDGlobals;
+</script>
+
+<% @title = @section_name.html_safe %>
+<%= stylesheet_link_tag    "codemirror", :media => "all" %>
+<%= stylesheet_link_tag    "theme/solarized", :media => "all" %>
+<%= stylesheet_link_tag    "pygments-solarized", :media => "all" %>
+<%= stylesheet_link_tag    "codedojo-editor", :media => "all" %>
+<%= stylesheet_link_tag    "ansi", :media => "all" %>
+<%= javascript_include_tag "codemirror" %>
+<%= javascript_include_tag "codemirror/active-line" %>
+<%= javascript_include_tag "codemirror/closebrackets" %>
+<%= javascript_include_tag "codemirror/continuecomment" %>
+<%= javascript_include_tag "codemirror/matchbrackets" %>
+<%= javascript_include_tag "clike" %>
+<%= javascript_include_tag "jqconsole" %>
+<%= javascript_include_tag "angular" %>
+<%= javascript_include_tag "angular-resource" %>
+<%= javascript_include_tag "ui-codemirror" %>
+<%= javascript_include_tag "editor/app" %>
+<%= javascript_include_tag "editor/services" %>
+<%= javascript_include_tag "editor/controllers" %>
+<%= javascript_include_tag "codedojo-editor" %>
+<div class="container-fluid codedojo-pagecontent">
+  <div class="row-fluid codedojo-console">
+    <div class="span3 codedojo-console">
+      <div id="exercise-content">
+        <%= @exercise.rendered_content.html_safe %>
+      </div>
+    </div>
+    <div class="span9 codedojo-console" ng-app="Editor">
+      <ng-view></ng-view>
+      <div class="row-fluid console-row-fluid">
+        <div id="console-wrapper">
+          <div id="console" class="codedojo-console span10"></div>
+          <div class="codedojo-buttons span2 button-group">
+						<div class="row-fluid">
+							<div class="btn-group btn-group-vertical console-buttons">
+								<button type="button" class="btn btn-inverse editor-btn" id="compileButton" value="Compile!"><i class="icon-play icon-white"></i> Run&nbsp;&nbsp;</button>
+								<button type="button" class="btn btn-inverse editor-btn" id="gradeButton" value="Grade!"><i class="icon-ok icon-white"></i> Grade</button>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<br />
+							<div class="btn-group btn-group-vertical console-buttons">
+								<button type="button" class="btn btn-danger editor-btn" id="termButton" disabled="true" value="Terminate!">Terminate</button>
+								<button type="button" class="btn editor-btn" id="clearButton" value="Clear console!">Clear</button>
+							</div>
+						</div>
+						<div class="row-fluid">
+							<br />
+							<button type="button" class="btn btn-success codedojo-buttons" id="nextButton" value="Next">Next <i class="icon-arrow-right icon-white"></i></button>
+						</div>
+          </div>
+        </div>
+      </div>
+        </div>
+    </div>
+</div>
+
+<div id="nextModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Continue to next lesson?</h3>
+  </div>
+  <div class="modal-body">
+    <p>You haven't completed this exercise yet! Would you still like to continue to the next one?</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button onclick="window.location.href='<%= url_for(:action => "next", :controller => "exercises")%>'" class="btn btn-success">Next <i class="icon-arrow-right icon-white"></i></button>
+  </div>
+</div>
+<div id="passModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>You Passed!</h3>
+  </div>
+  <div class="modal-body">
+    <p>You have completed this exercise!  Click Next to continue...</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button onclick="window.location.href='<%= url_for(:action => "next", :controller => "exercises")%>'" class="btn btn-success">Next <i class="icon-arrow-right icon-white"></i></button>
+  </div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+var backlink = document.createElement('li');
+backlink.innerHTML = "<a href='<%= url_for(:action => "show", :controller => "tutorials", :id => @tutorial_id) %>'>Back to Sections</a>";
+$('#nav_options')[0].appendChild(backlink);
+//]]>
+</script>

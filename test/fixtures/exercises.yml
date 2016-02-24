@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  index: 1
+  section_id: 1
+  content: MyText
+
+two:
+  index: 1
+  section_id: 1
+  content: MyText

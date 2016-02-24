@@ -1,0 +1,184 @@
+<% @title = @tutorial.title.html_safe %>
+<%= stylesheet_link_tag    "codedojo-tutorials", :media => "all" %>
+<%= stylesheet_link_tag    "jquery-ui-1.10.3.custom.min", :media => "all" %>
+<%= javascript_include_tag "jquery-ui-1.10.3.custom.min.js" %>
+<%= javascript_include_tag "tutorial-ajax" %>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span8 offset2">
+			<div class="row-fluid tutorialViewBox">
+				<div class="accordion" id="tutorialData_<%= @tutorial.id %>">
+					<div class="accordion-group well tutorial_well <%= @tutorialView[:status].gsub(/\s+/, '') %>">
+						<div class="accordion-heading">
+							<div class="row-fluid" id="tutorialInfo">
+								<div class="span10 tutorialViewBox_toggle title_text" data-toggle="collapse" data-target="#collapse_<%= @tutorial.id %>">
+									<%= @tutorial.title.html_safe %>
+								</div>
+							</div>
+						</div>
+						<div id="collapse_<%= @tutorial.id %>" class="accordion-body collapse in">
+							<div class="accordion-inner no_click">
+								<div class="row-fluid">
+									<div class="span12">
+										<div>
+											<%if signed_in? and @tutorialView[:status] != "Not Attempted" %>
+											<div class="row-fluid">
+												<div class="span2">
+													<b>Progress: <%= @tutorialView[:total_exercises_complete]%>/<%= @tutorialView[:total_exercises]%></b>
+												</div>
+												<div class="span9">
+													<div class="progress tutorial_progress">
+														<div class="bar" style="width:<%= @tutorialView[:percent_complete]%>%;"></div>
+													</div>
+												</div>
+											</div>
+											<%end%>
+											<b><%= @tutorialView[:status] %></b>&nbsp;&nbsp;&nbsp;&nbsp;
+											<b>Sensei:</b>&nbsp;&nbsp;<% if signed_in? and current_user.id == @tutorial.user.id %><button class="btn btn-mini" type="button" onclick="window.location.href='<%= url_for(:action => "edit", :controller => "tutorials", :id => @tutorial.id) %>'">Edit Tutorial</button><% else %><%= link_to @tutorial.user do %><%= @tutorial.user.username.html_safe %><% end %><% end %>&nbsp;&nbsp;&nbsp;&nbsp;
+											<b>Category:</b> <span class="label"><%= @tutorialView[:category] %></span>&nbsp;&nbsp;&nbsp;&nbsp;
+											<b>Difficulty:</b> <%= controller.difficulty(@tutorial.difficulty) %>&nbsp;&nbsp;&nbsp;&nbsp;
+											<b>Rating:</b> <span id="rating" class="label <% if not @tutorialView[:rating].nil? %> label-warning <% end %>"><%= @tutorial.rating %></span>
+											<%if signed_in? and @tutorialView[:status] != "Not Attempted" and current_user.id != @tutorial.user.id %>
+												<button class="btn btn-warning btn-mini" type="button" onclick="$('#ratingModal').modal('show')">Rate Tutorial</button>
+											<% end %>
+										</div>
+										<div class="well well-small description"><%= @tutorial.description.html_safe %>
+										</div>
+										<b>Tags:</b>  
+										<% @tutorial.tags.each do |tag| %>
+										<span class="badge" id="tag_<%= tag.id %>">
+											<%= tag.name.html_safe %>
+										</span>
+										<% end %>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			</div>
+
+
+			<div class="accordion" id="sections">
+				<% @sectionViewBoxes.each do |sectionView| %>
+				<% section = sectionView[:section]   %>
+				<div class="accordion-group well section_well">
+					<div class="accordion-heading">
+						<div class="row-fluid">
+							<div class="span8 tutorialViewBox_toggle section_text" data-toggle="collapse" data-target="#collapse-section_<%= section.id %>">
+								<%= section.subtitle.html_safe %>
+							</div>
+							<div class="span4">
+								<button class="btn btn-success" type="button" onclick="window.location.href='<%= url_for(section.exercises.order("index").first) %>'">Start</button>
+								<div class="btn-group">
+									<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Go to Exercise
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu">
+									<% section.exercises.order("index").each do |exercise| %>
+										<li>
+											<a href="<%= url_for(exercise) %>">
+												<%= exercise.index %>
+												<% if signed_in? %>
+													<% if sectionView[:results][exercise.id].nil? %>
+														(Not Attempted)
+													<% elsif sectionView[:results][exercise.id] %>
+														(Complete)
+													<% else %>
+														(In Progress)
+													<% end %>
+												<% end %>
+											</a>
+										</li>
+									<% end %>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="collapse-section_<%= section.id %>" class="accordion-body collapse in">
+						<div class="accordion-inner">
+							<div class="well well-small description span8 no_click">
+								<%= section.content.html_safe %>
+							</div>
+							<div class="span3">
+								<b><%= sectionView[:status] %></b>
+								<% if signed_in? %>
+								<div class="row-fluid no_click">
+									<div class="span2">
+										<b><%=sectionView[:num_exercises_completed]%>/<%=sectionView[:num_exercises]%></b>
+									</div>
+									<div class="span8">
+										<div class="progress section_progress">
+											<div class="bar" style="width:<%=sectionView[:percent_complete]%>%;"></div>
+										</div>
+									</div>
+								</div>
+								<%end%>
+							</div>
+						</div>
+					</div>
+				</div>
+				<% end %>
+			</div>
+
+		</div>
+	</div>	
+</div>
+<% if signed_in? %>
+<div id="ratingModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Select a rating for this tutorial</h3>
+  </div>
+  <div class="modal-body">
+		<div class="row-fluid">
+			<div class="span4">
+				<script>
+					$(function() {
+						$( "#slider" ).slider({
+							range: "min",<% if @tutorialView[:rating].nil? %> value: 5,<% else %> value: <%= @tutorialView[:rating] %>,<% end %>
+							min: 1,
+							max: 10,
+							step: 1,
+							slide: function( event, ui ) {
+								$( "#amount" ).val(ui.value );
+							}
+						});
+						$( "#amount" ).val( $( "#slider" ).slider( "value" ) );
+					});
+				</script>
+				<b>Your rating:&nbsp;&nbsp;</b><input type="text" id="amount" class="input-mini" style="display: inline-block; border: 0; color: #f6931f; font-weight: bold; margin-bottom: 0px" readonly/>
+			</div>
+			<div class="span8">
+				<div class="row-fluid">
+					<div class="span1">
+						<i class="icon-thumbs-down"></i>
+					</div>
+					<div class="span10">
+						<div id="slider"></div>
+					</div>
+					<div class="span1">
+						<i class="icon-thumbs-up"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button onclick="rateClick($('#amount')[0].value, <%= @current_user.id %>, <%= @tutorial.id %>)" class="btn btn-warning" data-dismiss="modal">Rate</button>
+  </div>
+</div>
+<script type="text/javascript">
+  //<![CDATA[
+  	window.onload = function() {
+			xhr_rating = new Ajaxhelper("rating");
+  	}
+  //]]>
+</script>
+<% end %>
+
+<br />
+<!--<%= link_to 'Edit', edit_tutorial_path(@tutorial) %> |
+<%= link_to 'Back', tutorials_path %>-->

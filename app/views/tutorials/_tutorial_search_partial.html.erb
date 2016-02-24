@@ -1,0 +1,69 @@
+<% if not @currTags.nil?
+			if not @currTags.empty?
+%>
+		<div class="row-fluid well well-small">
+			<b>Tags:</b>  
+			<% @currTags.each do |tag| %>
+			<span class="badge" id="currTag_<%= tag.id %>">
+				<%= tag.name.html_safe %>
+				<a  href="javascript:void(0);" id="<%= tag.id %>" onclick="searchClick(<%= tag.id %>)"><i class="icon-remove"></i></a>
+			</span>
+			<% end %>
+		</div>
+<% 		end
+		end
+%>
+<% @tutorialViewBoxes.each do |tutorialView|
+		tutorial = tutorialView[:tutorial]
+%>
+	<div class="row-fluid tutorialViewBox">
+		<div class="accordion" id="tutorialData_<%= tutorial.id %>">
+			<div class="accordion-group well tutorial_well <%= tutorialView[:status].gsub(/\s+/, '') %>">
+				<div class="accordion-heading">
+					<div class="row-fluid" id="tutorialInfo">
+						<div class="span10 tutorialViewBox_toggle title_text" data-toggle="collapse" data-target="#collapse_<%= tutorial.id %>">
+							<%= tutorial.title.html_safe %>
+						</div>
+						<div class="span2">
+							<button id="go_button_<%= tutorial.id %>" class="btn" type="button" onclick="window.location.href='<%= url_for(tutorial) %>'">Enter <i class="icon-arrow-right"></i></button>
+						</div>
+					</div>
+				</div>
+				<div id="collapse_<%= tutorial.id %>" class="accordion-body collapse in">
+					<div class="accordion-inner no_click">
+						<div class="row-fluid">
+							<div class="span12">
+								<div>
+									<%if signed_in? and tutorialView[:status] != "Not Attempted" %>
+										<div class="row-fluid">
+											<div class="span2">
+												<b>Progress: <%= tutorialView[:total_exercises_complete]%>/<%= tutorialView[:total_exercises]%></b>
+											</div>
+											<div class="span9">
+												<div class="progress tutorial_progress">
+													<div class="bar" style="width:<%= tutorialView[:percent_complete]%>%;"></div>
+												</div>
+											</div>
+										</div>
+									<%end%>
+									<b><%= tutorialView[:status] %></b>&nbsp;&nbsp;&nbsp;&nbsp;
+									<b>Sensei:</b>&nbsp;&nbsp;<% if signed_in? and current_user.id == tutorial.user.id %><button class="btn btn-mini" type="button" onclick="window.location.href='<%= url_for(:action => "edit", :controller => "tutorials", :id => tutorial.id) %>'">Edit Tutorial</button><% else %><%= link_to tutorial.user do %><%= tutorial.user.username.html_safe %><% end %><% end %>&nbsp;&nbsp;&nbsp;&nbsp;
+									<b>Category:</b> <span class="label"><%= tutorialView[:category] %></span>&nbsp;&nbsp;&nbsp;&nbsp;
+									<b>Difficulty:</b> <%= controller.difficulty(tutorial.difficulty) %>&nbsp;&nbsp;&nbsp;&nbsp;
+									<b>Rating:</b> <span id="rating" class="label <% if not tutorialView[:rating].nil? %> label-warning <% end %>"><%= tutorial.rating %></span>
+								</div>
+								<div class="well well-small description"><%= tutorial.description.html_safe %>
+								</div>
+								<b>Tags:</b>  
+								<% tutorial.tags.each do |tag| %>
+								<span class="badge" id="tag_<%= tag.id %>">
+									<%= tag.name.html_safe %>
+								</span>
+								<% end %>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+<% end %>

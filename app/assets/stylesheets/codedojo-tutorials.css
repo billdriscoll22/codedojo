@@ -1,0 +1,80 @@
+.InProgress {
+	border-width: 3px;
+	border-color: #cccccc
+}
+
+.Complete {
+	border-width: 3px;
+  border-color: #aaaaaa
+}
+
+.tutorialViewBox_toggle {
+	cursor: hand;
+	cursor: pointer
+}
+
+.tutorial_well {
+	padding: 8px;
+	padding-top: 10px;
+	background-color: #f0f0f0;
+}
+
+.well {
+	background-color: #f0f0f0;
+}
+
+.description {
+	margin: 10px;
+	background-color: #ffffff;
+}
+
+.no_click {
+	cursor: default
+}
+
+.title_text {
+	text-align: center;
+	font-weight: bold;
+	font-size: 28px;
+	line-height: 30px
+}
+
+.tutorial_box:hover {
+	background-color: #f2f2f2
+}
+
+.section_well {
+	padding: 8px;
+}
+
+.tutorial_progress {
+	margin-bottom: 0px
+}
+
+.section_progress {
+	margin-bottom: 0px
+}
+
+.section_text {
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 28px
+}
+
+/*a {
+	color: #ffffff
+}
+
+a:hover {
+	text-decoration: none;
+	color: #cccccc
+}
+*/
+body {
+	background-color: #ddd7c4;
+}
+
+select {
+	width: 100%;
+}

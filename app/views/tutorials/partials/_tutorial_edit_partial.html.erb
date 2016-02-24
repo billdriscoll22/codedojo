@@ -1,0 +1,219 @@
+<div id="tutorial-name">
+	<h1>{{tutorialName}}</h1>
+</div>
+<br>
+		
+  <div id="tutorial-details-button-div">
+  	<button class="btn btn-primary" onclick="$('#tutorial-details-modal').modal('show')" href="#tutorial-details-modal">Edit Tutorial Details</button>
+  </div>
+  
+  <div id="tutorial-details-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div id="tutorial-details-modal-header" class="modal-header modified">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="tutorial-edit-div">
+					<legend>Edit tutorial name:</legend>
+					<input type="text" class="input-xxlarge" data-ng-model="tutorialName">
+			</div>
+			<div class="tutorial-edit-div">
+				<legend>Edit Description of Tutorial</legend>
+				<textarea type="text" class="input-xxlarge" rows="4" data-ng-model="description"></textarea>
+			</div>
+			<div class="tutorial-edit-div">
+				<legend>Select Difficulty of Tutorial</legend>
+				<select ng-model="difficulty">
+					<option ng-repeat="level in difficultyLevels" value="{{level.value}}">{{level.name}} {{level.value}}</option>
+				</select>
+			</div>
+			
+			<div class="tutorial-edit-div">
+				<legend>Select Category</legend>
+				<select ng-model="category_id">
+					<%@categories.each do |c|%>
+					<option value="<%=c.id%>"><%=c.name%></option>
+					<%end%>
+				</select>
+			</div>
+			
+			<div class="tutorial-edit-div">
+				<legend>Tag this tutorial &nbsp;<i class="icon-question-sign" id="tags-detail"></i>
+				</legend>
+				<input type="text" name="tags" placeholder="Tags" class="tagManager"/>
+			</div>
+			<script>
+					$('#tags-detail').tooltip({title:'Start typing in a tag name and press enter to select a pre-existing tag from the drop down menu, or press comma to insert a tag that hasn\'t existed before.'})
+			</script>
+	</div>
+	
+<div id="epiceditor-modal" class="modal hide fade" tabindex="-1" role="dialog">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	<div id="epiceditor" class="span9 epiceditor-div"></div>
+</div>
+
+<ul class="nav nav-tabs">
+  <li ng-repeat="section in sections" ng-class="{active: $index==0}"><a id="section-tab" href="#section{{$index}}" data-toggle="tab" onclick="selectedSection={{$index}}">{{section.title}}</a></li>
+  <li><button class="btn" data-ng-click="addSection()"><i class="icon-plus"></i> Section</button></li>
+</ul>
+
+<div class="tab-content codedojo-console tutorial-content-tab" id="section-contents">
+  <div ng-repeat="section in sections" class="tab-pane fade in" ng-class="{active: $index==0}" id="section{{$index}}">	
+  	  	
+  	<button type="button" class="close remove-section" aria-hidden="true" ng-click="removeSection($index)"><i class="icon-trash"></i></button>
+  	<script>
+		$('.remove-section').tooltip({title:'Remove Section'});
+  	</script>
+  	<br>
+  	<div class="section-div">
+	  <div class="tutorial-edit-div section-edit">
+	      <legend>Section Subtitle</legend>
+	      <div class="controls">
+		  	<input type="text" class="input-xxlarge" data-ng-model="section.subtitle"></input>
+	      </div>
+   	  </div>
+   	  	  <div class="tutorial-edit-div section-edit">
+	      <legend>Section Description</legend>
+	      <div class="controls">
+	  	  	<textarea class="input-xxlarge" rows="3" data-ng-model="section.content"></textarea>
+	      </div>
+   	  </div>
+   </div>  
+   	  
+   	  
+   	  <div class="section-div">
+   	  	<h3>This Section's Exercises:</h3>
+   	  	<div class="exercise-tab-list">
+	   	  	<ul class="nav nav-tabs">
+	  			<li ng-repeat="exercise in section.exercises" ng-class="{active: $index==0}"><a id="exercise-tab" href="#section{{$parent.$index}}-exercise{{$index}}" data-toggle="tab" onclick="selectedExercise={{$index}}">{{'Exercise '+ $index}}</a></li>
+				<button class="btn" data-ng-click="addExercise(section)"><i class="icon-plus"></i> Exercise</button>
+			</ul>
+		</div>
+		<div class="tab-content codedojo-console exercise-content-tab">
+	    	<div ng-repeat="exercise in section.exercises" class="tab-pane fade in" ng-class="{active: $index==0}" id="section{{$parent.$index}}-exercise{{$index}}">
+			   	<button type="button" class="close remove-exercise" aria-hidden="true" ng-click="removeExercise(section,$index)"><i class="icon-trash"></i></button>
+			   	<script>
+					$('.remove-exercise').tooltip({title:'Remove Exercise'});
+  				</script>
+			   <br>
+			   <br>
+			   <div class="tutorial-edit-div">
+					<legend>Select Project Type</legend>
+					<select ng-model="exercise.proj_type">
+						<option value="c">c</option>
+						<option value="c++">c++</option>
+					</select>
+				</div>				  	
+				 <div class="tutorial-edit-div">
+			    	<legend>Edit Exercise Text &nbsp;<i class="icon-question-sign exercise-text-tooltip" onclick="window.open('https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet')"></i>
+			    	</legend>
+			    	<script>
+			    		$('.exercise-text-tooltip').tooltip({title:'Each exercise is accompanied with a lesson text. Click below to open up an editor and create the lesson text for this exercise.'+
+			    			'The editor allows you to write and edit your lesson text using Markdown to format how the lesson text will be displayed.'+
+			    			'The editor also allows you to preview how your markdown text will look. Click on this question mark to open up guide page for using Markdown.'});
+			    	</script>
+          			<button onclick="$('#epiceditor-modal').modal('show');" role="button" class="btn btn-success" ng-click="loadEpicEditor($parent.$index,$index)">Edit Lesson Text</button>
+				</div>		
+				<script>
+					reflowEditors();
+				</script>
+				  <div class="tutorial-edit-div">  
+				  	<legend>Create and edit code templates for this exercise.&nbsp;<i class="icon-question-sign template-tooltip"></i>
+				    </legend>
+				    <script>
+				    	$('.template-tooltip').tooltip({title:'Templates are where you define empty functions that the student must implement in the exercise order header files required by compilation. Be sure to suffix the template name with .c for a c exercise and .cpp for a c++ exercise.'})
+				    </script>
+					  <any ng-repeat="template in exercise.templates">
+              <button onclick="$('#section{{$parent.$parent.$index}}-exercise{{$parent.$index}}-template{{$index}}-modal').modal('show')" role="button" class="btn btn-info btn-small">{{template.fileName}}</button>
+						  <!--modal of template code -->
+						  <div id="section{{$parent.$parent.$index}}-exercise{{$parent.$index}}-template{{$index}}-modal" class="modal hide fade template-modal" tabindex="-1" role="dialog">
+							  <div class="modal-header modified">
+							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							    <button type="button" class="close delete-template" data-dismiss="modal" aria-hidden="true" data-ng-click="deleteTemplate(exercise,$index)" style="color:red;float:left;"><i class="icon-trash"></i></button>
+							  	<script>
+							  		$('.delete-template').tooltip({title:'Delete Template'});
+							  	</script>
+							  </div>
+			    			 <div class="tutorial-edit-div">
+							  	<legend>Edit filename of this template:</legend>
+							  	<input type="text" ng-model="template.fileName">
+							  	<br>
+				                  <label class="checkbox">
+				                    <input type="checkbox" ng-model="template.should_compile">Should Compile <i class="icon-question-sign checkbox-tooltip"></i>
+				                  </label>
+				                  </br>
+							  	<script>
+							  		$('.checkbox-tooltip').tooltip({title:'Uncheck this if this template is a header file.'})
+							    </script>
+							  </div>							  
+							  <textarea rows="20" cols="80" ui-codemirror="editorOpts" ng-model="template.code">
+			    			 </textarea>
+		    			 	<script>
+		    			 		setRefreshEventOnModals();
+		    			 	</script>
+		    			 </div>
+	    			 </any>
+	    			 
+	    			 <button class="bnt btn-inverse btn-mini" data-ng-click="addTemplate(exercise)">Add Template</button>
+	 			  </div>
+	 			  
+	 			  <div class="tutorial-edit-div">
+		 			  <legend>Write the testing code to validate the student's implementation&nbsp;<i class="icon-question-sign" id="testing-code-detail"></i>
+		 			  	</legend>
+		 			  	<script>
+		 			  		$('#testing-code-detail').tooltip({title:'Testing code is written in c or c++. There, you define function prototypes of the functions that the students must implement.'+
+		 			  												'You also define a function runTests() in which you validate the student\'s program, returning 0 for success or 1 for failure.'})
+		 			  	</script>
+	          			<button onclick="$('#section{{$parent.$index}}-exercise{{$index}}-testfile').modal('show')" role="button" class="btn btn-success">Testing Code Editor</button>
+		 			  <!--Modal of testing code-->
+		 			  <div id="section{{$parent.$index}}-exercise{{$index}}-testfile" class="modal hide fade" tabindex="-1" role="dialog">
+		 			  		<button type="button" class="close close-testing-code-modal" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<textarea rows="20" cols="80" ui-codemirror="editorOpts" ng-model="exercise.testing_file">
+				    		</textarea>
+		 			  </div>
+	 			  </div>
+	 			  
+	 			  <div class="tutorial-edit-div">
+		 			  <legend>Add validators&nbsp;<i class="icon-question-sign" id="validator-detail"></i>
+					  </legend>
+					  <script>
+					   	$('#validator-detail').tooltip({title:'Validators are written in javascript and are another tool to test the studet\'s program.'+
+					    										'You can access and validate the program\s standard output, standard error, arguments, and return values. Return \'true\''+
+					    										' if validation passes, or throw a meaningful message indicating that the program did not pass.'})
+					  </script>
+	          			<button ng-repeat="validator in exercise.validators" onclick="$('#section{{$parent.$parent.$index}}-exercise{{$parent.$index}}-validator{{$index}}').modal('show')" role="button" class="btn btn-info btn-small">Validator {{$index}}</button>
+		 			  <!--Modal of testing code-->
+		 			  <div ng-repeat="validator in exercise.validators" id="section{{$parent.$parent.$index}}-exercise{{$parent.$index}}-validator{{$index}}" class="modal hide fade template-modal" tabindex="-1" role="dialog">
+						<div class="modal-header modified">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<button type="button" class="close delete-validator" data-dismiss="modal" aria-hidden="true" data-ng-click="removeValidator(exercise,$index)" style="color:red;float:left;"><i class="icon-trash"></i></button>
+							<script>
+								$('.delete-validator').tooltip({title:'Delete Validator'});
+							</script>							
+						</div>
+						<div class="tutorial-edit-div">
+					    	<legend>Arguments passed in</legend>
+							<input class="input-xlarge" type="text" data-ng-model="validator.args"></input>
+						</div>
+						<textarea rows="20" cols="80" ui-codemirror="jsEditorOpts" ng-model="validator.validator">
+				    	</textarea>
+				    	<script>
+			    			setRefreshEventOnModals();
+			    		</script>
+		 			  </div>
+		 			  <button class="btn btn-inverse btn-mini" data-ng-click="addValidator(exercise)">Add Validator</button>
+				</div>
+	 			  
+	    	</div>
+		</div>
+   	  </div>
+
+  </div>
+</div>
+
+<script>
+$('.tagManager').tagsManager({
+	typeahead:true,
+	typeaheadAjaxSource:'/tags',
+	typeaheadAjaxPolling: true	
+});
+
+</script>

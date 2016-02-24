@@ -1,0 +1,37 @@
+<div class="row-fluid editor-row-fluid noise">
+  <div class="span10 codedojo-console">
+    <textarea rows="20" cols="80" id="usercode_textarea" ui-codemirror="editorOpts" ng-model="files[selectedIndex].content">
+    </textarea>
+  </div>
+  <div class="span2 codedojo-console">
+		<div class="codedojo-files-wrapper">
+			<div class="files">
+				<div class="files-scroll">
+					<ul class="nav nav-pills nav-stacked codedojo-files noise">
+						<li class="nav-header">Files</li>
+						<li ng-repeat="file in files" ng-class="{ active: $index == selectedIndex }"><a href="#/{{ $index }}" ng-class="{ active: $index == selectedIndex, fileTab: $index == selectedIndex, inactiveFileTab: $index != selectedIndex }">{{ file.file_name }}</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="buttons">
+			<div class="btn-group btn-group-vertical editor-buttons well-small">
+					<button ng-disabled="files[selectedIndex].isClean || !isLoggedIn" ng-click="save()" class="btn codedojo-buttons">Save</button>
+          <button type="button" onclick="$('#revertModal').modal('show')" class="btn btn-danger codedojo-buttons">Revert</button>
+			</div>
+			</div>
+		</div>
+  </div>
+</div>
+<div id="revertModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Revert {{files[selectedIndex].file_name}}?</h3>
+  </div>
+  <div class="modal-body">
+    <p>Reverting this file will <strong>permanently</strong> erase any changes you have made.</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button ng-click="revert()" data-dismiss="modal" class="btn btn-danger">Revert {{files[selectedIndex].file_name}}</button>
+  </div>
+</div>

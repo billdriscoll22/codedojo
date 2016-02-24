@@ -1,0 +1,51 @@
+<% @title = "New Tutorial" %>
+
+<%= stylesheet_link_tag    "createtutorial/create-tutorial.css"%>
+<%= stylesheet_link_tag    "codemirror", :media => "all" %>
+<%= stylesheet_link_tag    "theme/solarized", :media => "all" %>
+<%= stylesheet_link_tag    "pygments-solarized", :media => "all" %>
+<%= stylesheet_link_tag    "ansi", :media => "all" %>
+<%= stylesheet_link_tag    "bootstrap-tagmanager.css"%>
+<%= javascript_include_tag "bootstrap-tagmanager" %>
+<%= javascript_include_tag "angular" %>
+<%= javascript_include_tag "ui-codemirror" %>
+<%= javascript_include_tag "codemirror" %>
+<%= javascript_include_tag "codemirror/active-line" %>
+<%= javascript_include_tag "codemirror/closebrackets" %>
+<%= javascript_include_tag "codemirror/continuecomment" %>
+<%= javascript_include_tag "codemirror/matchbrackets" %>
+<%= javascript_include_tag "angular-resource" %>
+<%= javascript_include_tag "tutorial-create/tc-app.js"%>
+<%= javascript_include_tag "tutorial-create/epiceditor.min.js"%>
+<%= javascript_include_tag "clike" %>
+<%= javascript_include_tag "javascript" %>
+
+
+<div ng-app="tcApp" data-ng-controller="TutorialController" class="tutorial-editor-wrapper">
+
+<%= render "/tutorials/partials/tutorial_edit_partial" %>
+
+<button class="btn btn-primary" data-ng-click="submitTutorial()">Submit Tutorial</button>
+
+<div id="template-names-error" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  	<h3>Error Submitting Tutorial</h3>
+  </div>
+  <div class="modal-body">
+    <p id="template-names-error-message"></p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
+
+</div>
+<br>
+
+<div id="error"></div>
+<!--
+<%= render 'form' %>
+
+<%= link_to 'Back', tutorials_path %>
+-->

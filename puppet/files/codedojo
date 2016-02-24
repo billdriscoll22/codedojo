@@ -1,0 +1,13 @@
+<VirtualHost *:80>
+  ServerName localhost
+  DocumentRoot "/vagrant/public"
+  RailsEnv development
+  
+  PassengerEnabled on
+  PassengerMinInstances 3
+  <Directory "/">
+    Options Indexes FollowSymLinks
+    Order allow,deny
+    Allow from all
+  </Directory>
+</VirtualHost>

@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  args: MyString
+  exercise_id: 
+  validator: MyString
+
+two:
+  args: MyString
+  exercise_id: 
+  validator: MyString

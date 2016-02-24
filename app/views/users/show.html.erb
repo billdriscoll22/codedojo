@@ -1,0 +1,333 @@
+<% @title = "Profile" %>
+<%= stylesheet_link_tag    "codemirror", :media => "all" %>
+<%= stylesheet_link_tag    "theme/solarized", :media => "all" %>
+<%= stylesheet_link_tag    "pygments-solarized", :media => "all" %>
+<%= stylesheet_link_tag    "codedojo-editor", :media => "all" %>
+<%= stylesheet_link_tag    "ansi", :media => "all" %>
+<%= stylesheet_link_tag     "profile", :media => "all" %>
+<link href='http://fonts.googleapis.com/css?family=Bubblegum+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Quantico' rel='stylesheet' type='text/css'>
+<div id="notice" class="<%= flash[:positivity]%> row-fluid">
+  <div class="span11 offset1"><%= notice %></div>
+
+</div>
+<%=@content%>
+
+<%if(@homeScreen)%>
+
+<div id="profile" class="row-fluid">
+
+  <div class="span3 media offset1">
+    <a class="pull-left" href="http://www.gravatar.com">
+      <%= image_tag(avatar_url(@user), :class => "img-polaroid") %>
+    </a>
+    <div class="media-body">
+      <div id="welcome">
+        <h2>Welcome, <%= @user.username %>!</h2>
+      </div>
+    </div>
+  </div><!--span4 media-->
+
+  <div id="user-stats" class="span3">
+    <h2>User Stats</h2>
+    <b>Created</b><br/>
+    You've created <%= @user.tutorials.length.to_s %> tutorial<%if (@user.tutorials.length != 1)%>s<%end%>.  
+    <% if(@user.tutorials.length > 0)%>
+      The average rating of your tutorials is <span class="label"><%= @user.get_avg_rating.to_s%></span>.
+    <%end%>
+      <br/>
+    <b>Taken</b><br/>
+    You've attempted <%= @user.getNumTutorialsTaken.to_s%> tutorial<%if (@user.getNumTutorialsTaken != 1)%>s<%end%> and completed <%= @user.results.where(:is_correct => true).length.to_s%> exercise<%if (@user.results.where(:is_correct => true).length != 1)%>s<%end%>.  Based on which exercises you've passed, we estimate you to be a <%= controller.difficulty(@user.getTypeTutorialsTaken)%> programmer.
+  </div>
+
+  <div id="recent" class="span4">
+    <h3>Recent Activity</h3>
+    <%if(@hasExercise)%>
+     <a href="/exercises/<%=@exercise_id.to_s%>"><%=controller.pyg(@fileContent, @lastExercise.proj_type).html_safe%></a>
+      From section <b><%= link_to @lastSection.subtitle, "/exercises/" + @exercise_id.to_s %></b> in <b><%= @lastTutorial.title%></b>
+
+    <%else%>
+        You haven't started any tutorials yet! <b><%= link_to 'Check some out', "/tutorials/index"%></b>
+        <%= controller.pyg("printf('Hello World') //is just the beginning", 'c').html_safe%>
+    <%end%>
+  </div><!--recent-->
+
+  
+</div><!--profile-->
+  
+
+  <div class="row-fluid" id="secondary-content">
+
+    <div class="span3 offset1">
+      <h3><span class="bubblegum">Sensei Panel</span></h3>
+      <div id="sensei-panel">
+        <h3>Tutorials</h3>
+        <% if(@senseiTutorials.length > 0 )%>
+          <% counter = 55000 %>
+          <div class="accordion" id="accordion1">
+            <%@senseiTutorials.each do |tutorial|%>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse-<%= counter.to_s%>">
+                    <b><%= tutorial.title %></b>
+                  </a>
+                </div>
+                <div id="collapse-<%= counter.to_s%>" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <%=tutorial.description%><br/><br/>
+                    <a href="/tutorials/<%=tutorial.id%>/edit" class="btn btn-warning btn-small">Edit</a>
+                    <a href="/tutorials/destroy/<%=tutorial.id%>" class="btn btn-danger btn-small">Delete </a>
+                  </div>
+                </div>
+              </div>
+              <%counter += 1%>
+            <%end%>
+          </div>
+
+
+
+          <a href="/tutorials/new" class="btn btn-primary btn-large">Create tutorial</a>
+        <%else%>
+          You aren't a sensei yet for any tutorials.  Creating tutorials is a great way to 
+          share your knowledge with others, as well as to solidfy your own understanding of the material. You can make the tutorials long or short, easy or hard.  It's all up to you.<br/>
+          <br/>
+          <a href="/tutorials/new" class="btn btn-primary btn-large">Create your own tutorial</a>
+        <%end %>
+
+        <h3>Followers</h3>
+        <% if(@user.followers.length > 0) %>
+          <%@user.followers.each do |follower|%>
+            <%follower_info = User.find_by_id(follower.follower_id)%>
+            <div class="media">
+                <a class="pull-left" href="/users/<%=follower_info.id.to_s%>">
+                  <%= image_tag(avatar_url(follower_info, 30)) %>
+                </a>
+                <div class="media-body">
+                  <%= link_to(follower_info.username, "/users/" + follower_info.id.to_s)%>
+                </div>
+              </div>
+          <%end%>
+        <%else%>
+          You have no followers.  <a href="tutorials/new">Creating some tutorials</a> is a great way to get them!
+        <%end%>
+      </div>
+    </div>
+
+    <div class="span3">
+      <h3><span class="turquoise">News Feed</span></h3>
+      <div id="sensei-feed">
+        <%if (@senseiFeed.length > 0) %>
+            <% @senseiFeed.each do |obj|%>
+              <div class="media">
+                <a class="pull-left" href="http://www.gravatar.com">
+                  <%= image_tag(avatar_url(obj["creator"], 60), :class => "img-polaroid") %>
+                </a>
+                <div class="media-body">
+                  <b><%= link_to(obj["creator_name"], "/users/" + obj["creator_id"].to_s)%></b> created <b><%= link_to(obj["tutorial_title"], "/tutorials/" + obj["tutorial_id"].to_s)%></b>
+                </div>
+              </div>
+            <%end%>
+        <%else%>
+          You are currently not following any sensei with content.  <b><%= link_to "Browse some tutorials", "/tutorials/index"%></b> to see if you can find one you like.
+        <%end%>
+         <br/>
+         <br/>
+        <form class="form-inline" method="get" action="/users/follow">
+          <label class="control-label" for="user-search">You can search for a sensei by username.  This is a great way to quickly follow people you know on CodeDojo. </label>
+          <input id="user-search" type="text" class="span8" autocomplete="off" data-provide="typeahead" data-items="5" data-source='<%= @allNames.to_json %>' name="username" placeholder="username" />
+          <input class="btn btn-success" type="submit" value="Follow">
+        </form>
+      </div>
+      
+    </div>
+
+
+    <div class="span4" id="tutorial-finder">
+      <h3><span class="quantico">Tutorial Finder</span></h3>
+
+
+      <div id="popular-tutorials">
+        <h3>Popular</h3>
+
+        <div class="accordion" id="accordion2">
+          <% counter = 0 %>
+          <% @popularTutorials.each do |tutorial|%>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-<%= counter.to_s%>">
+                    <b><%= tutorial.title %></b>
+                  </a>
+                </div>
+                <div id="collapse-<%= counter.to_s%>" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="span12">
+                      <div>
+                        <b>Sensei:</b>&nbsp;<%= link_to tutorial.user do %>
+                          <%= tutorial.user.username.html_safe %>
+                          <% end %>&nbsp;&nbsp;&nbsp;
+                          <b>Category:</b> <span class="label"><%= tutorial.category.name %></span>&nbsp;&nbsp;&nbsp;
+                          <b>Difficulty:</b> <%= controller.difficulty(tutorial.difficulty) %>&nbsp;&nbsp;&nbsp;
+                          <b>Rating:</b> <span id="rating" class="label"><%= tutorial.rating %></span>
+                      </div>
+                    </div>
+                    <%= tutorial.description %>
+                    <br/>
+                    <br/>
+                    <a href="/tutorials/<%=tutorial.id%>" class="btn btn-success">Check it out!</a>
+                  </div>
+                </div>
+            </div>
+            <% counter += 1 %>
+          <% end%>
+      </div>
+
+      </div>
+      <div id="new-tutorials">
+        <h3>New</h3>
+        <div class="accordion" id="accordion3">
+          <% @newTutorials.each do |tutorial|%>
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapse-<%= counter.to_s%>">
+                    <b><%= tutorial.title %></b>
+                  </a>
+                </div>
+                <div id="collapse-<%= counter.to_s%>" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="span12">
+                      <div>
+                        <b>Sensei:</b>&nbsp;<%= link_to tutorial.user do %>
+                          <%= tutorial.user.username.html_safe %>
+                          <% end %>&nbsp;&nbsp;&nbsp;
+                          <b>Category:</b> <span class="label"><%= tutorial.category.name %></span>&nbsp;&nbsp;&nbsp;
+                          <b>Difficulty:</b> <%= controller.difficulty(tutorial.difficulty) %>&nbsp;&nbsp;&nbsp;
+                          <b>Rating:</b> <span id="rating" class="label"><%= tutorial.rating %></span>
+                      </div>
+                    </div>
+                    <%= tutorial.description %>
+                    <br/>
+                    <br/>
+                    <a href="/tutorials/<%=tutorial.id%>" class="btn btn-success">Check it out!</a>
+                  </div>
+                </div>
+            </div>
+            <% counter += 1 %>
+          <% end%>
+      </div>
+      </div>
+
+      <a href="/tutorials/index" class="btn btn-large btn-primary">Browse All Tutorials</a>
+    </div>
+
+    
+
+    
+   
+
+  </div><!--row-fluid-->
+
+
+
+
+<%else%>
+  <div id="profile" class="row-fluid">
+    <div class="span3 media offset1">
+    <a class="pull-left" href="http://www.gravatar.com">
+      <%= image_tag(avatar_url(@user), :class => "img-polaroid") %>
+    </a>
+    <div class="media-body">
+      <div id="welcome">
+        <h2>Welcome to <%= @user.username %>'s profile!</h2>
+        <% if signed_in? %>
+          <% if @isFollowing%>
+            <a href="unfollow?username=<%=@user.username%>" class="btn btn-danger">Unfollow</a>
+          <%else%>
+            <a href="follow?username=<%=@user.username%>" class="btn btn-success">Follow </a>
+          <%end%>
+        <% end %>
+      </div>
+    </div>
+  </div><!--span4 media-->
+
+  <div id="user-stats" class="span3">
+    <h2>User Stats</h2>
+    <%= @user.username %> has created <%= @user.tutorials.length.to_s %> tutorials.  
+    <% if(@user.tutorials.length > 0)%>
+      The average rating of their tutorials is <span class="label"><%= @user.get_avg_rating.to_s%></span>.
+    <%end%>
+  </div>
+
+  <div id="recent" class="span4">
+    <h3>Recent Activity</h3>
+    <%if(@hasExercise)%>
+     <a href="/exercises/<%=@exercise_id.to_s%>"><pre><%= @fileContent %></pre></a>
+      From section <b><%= link_to @lastSection.subtitle, "/exercises/" + @exercise_id.to_s %></b> in <b><%= @lastTutorial.title%></b>
+
+    <%else%>
+        <%= @user.username %> has no recent activity.
+    <%end%>
+  </div><!--recent-->
+  </div><!--profile-->
+  
+  <div class="row-fluid" id="secondary-content">
+    <div class="span3 offset1">
+      <div id="sensei-panel">
+        <h3>Tutorials</h3>
+        <% if(@senseiTutorials.length > 0 )%>
+          <% counter = 55000 %>
+          <div class="accordion" id="accordion1">
+            <%@senseiTutorials.each do |tutorial|%>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse-<%= counter.to_s%>">
+                    <b><%= tutorial.title %></b>
+                  </a>
+                </div>
+                <div id="collapse-<%= counter.to_s%>" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <div class="span12">
+                      <div>
+                          <b>Category:</b> <span class="label"><%= tutorial.category.name %></span>&nbsp;&nbsp;&nbsp;
+                          <b>Difficulty:</b> <%= controller.difficulty(tutorial.difficulty) %>&nbsp;&nbsp;&nbsp;
+                          <b>Rating:</b> <span id="rating" class="label"><%= tutorial.rating %></span>
+                      </div>
+                    </div>
+                    Description: <%=tutorial.description%><br/><br/>
+                    <a href="/tutorials/<%=tutorial.id%>" class="btn btn-small btn-success">Take a look</a>
+                  </div>
+                </div>
+              </div>
+              <%counter += 1%>
+            <%end%>
+          </div>
+
+        <%else%>
+          <%= @user.username%> isn't the sensei for any tutorials.
+          <br/>
+        <%end %>
+
+        
+
+      </div>
+
+    </div>
+    <div class="span3" id="followers">
+      <h3>Followers</h3>
+        <% if(@user.followers.length > 0) %>
+          <%@user.followers.each do |follower|%>
+            <%follower_info = User.find_by_id(follower.follower_id)%>
+            <div class="media">
+                <a class="pull-left" href="/users/<%=follower_info.id.to_s%>">
+                  <%= image_tag(avatar_url(follower_info, 30)) %>
+                </a>
+                <div class="media-body">
+                  <%= link_to(follower_info.username, "/users/" + follower_info.id.to_s)%>
+                </div>
+              </div>
+          <%end%>
+        <%else%>
+          <%= @user.username%> has no followers.
+        <%end%>
+      </div>
+  </div>
+<%end%>

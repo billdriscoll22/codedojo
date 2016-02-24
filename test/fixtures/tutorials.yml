@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  num_ratings: 1
+  description: MyText
+  title: MyString
+  difficulty: 1
+  rating: 1.5
+  user_id: 1
+
+two:
+  num_ratings: 1
+  description: MyText
+  title: MyString
+  difficulty: 1
+  rating: 1.5
+  user_id: 1

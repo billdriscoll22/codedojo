@@ -1,0 +1,154 @@
+#footer{
+	height: 50px;
+}
+
+#user-stats{
+	h2{
+		margin-bottom: 0px;
+	}
+}
+
+#sensei-feed{
+	
+	.media{
+		border-style: solid;
+		border-width: 0px 0px 1px 0px;
+		border-color: gray;
+		padding-bottom: 10px;
+
+	}
+
+}
+
+#followers{
+	.media{
+		border-style: solid;
+		border-width: 0px 0px 1px 0px;
+		border-color: gray;
+		padding-bottom: 5px;
+		margin-top: 5px;
+	}
+}
+
+body{
+	background-color: #F0f0f0;
+}
+
+.turquoise{
+	/*color: rgb(52, 207, 255);*/
+	font-size: 32px;
+}
+
+h3{
+	
+	.bubblegum{
+		font-size: 32px;
+		/*font-size: 34px;*/
+		/*color: purple;*/
+	}
+}
+
+.fr{
+	float: right;
+}
+
+.quantico{
+	/*font-family: 'Quantico', sans-serif;*/
+	font-size: 32px;
+	/*color: green;*/
+}
+
+.bubblegum{
+	/*font-family: 'Bubblegum Sans', cursive;*/
+}
+
+.navbar{
+	margin-bottom: 0px!important;
+}
+
+#profile{
+	border-style: solid;
+	border-width: 0px 0px 2px 0px;
+	border-color: gray;
+	height: 215px;
+	padding: 15px 0px 0px 0px;
+	background-color: #ddd7c4;
+	margin-top: 0px!important;
+	overflow-y: hidden;
+
+
+	.pull-left{
+	}
+}
+
+#recent{
+
+	pre{
+		height: 100px;
+		overflow: hidden;
+	}
+
+	code{
+		white-space: pre-wrap;
+	}
+
+	a:hover{
+		text-decoration: none;
+	}
+	
+	h3{
+		margin: 0px;
+	}
+
+}
+
+#profile{
+	h3{
+		margin: 5px 5px 5px 0px;
+	}
+
+}
+
+#secondary-content{
+	background-color: rgb(240, 240, 240);
+	padding-bottom: 100px;
+}
+
+#sensei-panel{
+	font-size: 16px;
+	text-align: justify;
+}
+
+#sensei-feed{
+	font-size: 16px!important;
+	text-align: justify;
+
+	label{
+		font-size: 16px!important;
+	}
+}
+
+.negative{
+	background-color: rgb(230, 88, 83);
+}
+
+.positive{
+	background-color: rgb(96, 193, 96);
+}
+
+#welcome{
+}
+
+#notice{
+	
+	div{
+		line-height: 2;
+		min-height: 0px!important;
+	}
+}
+
+#secondary-content{
+	.accordion-group{
+		background-color: #f9f9f9;
+	}
+}

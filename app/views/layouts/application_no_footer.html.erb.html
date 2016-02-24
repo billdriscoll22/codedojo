@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= @title + " | CodeDojo" %></title>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag    "bootstrap", :media => "screen" %>
+  <%= stylesheet_link_tag    "bootstrap-responsive", :media => "screen" %>
+	<%= stylesheet_link_tag    "codedojo-bootstrap", :media => "screen" %>
+  <%= javascript_include_tag "jquery" %>
+  <%= javascript_include_tag "jquery-migrate" %>
+  <%= javascript_include_tag "bootstrap" %>
+  <%= javascript_include_tag "bootstrap-collapse" %>
+  <%= javascript_include_tag "bootstrap-transition" %>
+  <%= javascript_include_tag "bootstrap-modal" %>
+</head>
+<body>
+
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <div id="navbar" class="container">
+        <!-- Be sure to leave the brand out there if you want it shown -->
+        <a class="brand" href="/">CodeDojo</a>
+
+				<ul id="nav_options" class="nav">
+          <li id="nav_tutorials"><a href="/tutorials/">Tutorials</a></li>
+        </ul>
+
+        <% if signed_in? %>
+        <ul class="nav pull-right">
+          <li><%= image_tag(avatar_url(current_user), :class => "navbar-avatar") %></li>
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.username %> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li>
+            <a href="/users/<%= current_user.id %>">My profile</a>
+            <a href="/users/logout">Sign out</a>
+            </li>
+          </ul>
+          </li>
+        </ul>
+				<% else %>
+				<ul class="nav pull-right">
+          <li id="nav_signup"><a href="<%= url_for(:controller => "users", :action => "new") %>">Sign Up</a></li>
+          <li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign In<b class="caret"></b></a>
+						<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+							<%= form_for(:user, :url => {:controller => :users, :action => :login}) do |f| %>
+								<fieldset>
+									<%= f.text_field :username, :class => "text_field", :placeholder => "Username", :style => "margin-bottom: 5px" %>
+									<br />
+									<%= f.password_field :password, :class => "password", :placeholder => "Password", :style => "margin-bottom: 5px" %>
+									<%= f.submit "Sign In", :class => "btn btn-primary", :style => "width: 100%" %>
+								</fieldset>
+							<%end%>
+						</div>
+					</li>
+        </ul>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+<%= yield %>
+
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<% @title = "Sign up" %>
+<%= stylesheet_link_tag    "codedojo-tutorials", :media => "all" %>
+<% concat params[:message]%>
+<% if(flash[:notice])%>
+<%= flash[:notice]%>
+<br/>
+<% end %>
+<div class="row-fluid">
+	<div class="span5 offset1 well">
+		<h3>Sign up for a CodeDojo account</h3>
+    <div class="alert alert-error">
+      <h4>Warning!</h4>
+      <p>CodeDojo is under development and is not yet using SSL. <strong>Your password will be sent in the clear!</strong></p>
+    </div>
+		<%= form_for(:user, :url => {:controller => :users, :action => :create}, :html => {:class => "form-horizontal"}) do |f|%>
+			<fieldset>
+				<legend></legend>
+				<div class="control-group">
+					<label class="control-label"><b>Username</b></label>
+					<div class="controls">
+						<%= f.text_field :username, :class => "text_field", :placeholder => "Username" %>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label"><b>E-mail address</b></label>
+					<div class="controls">
+						<%= f.text_field :email, :class => "text_field", :placeholder => "you@example.com" %>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label"><b>Password</b></label>
+					<div class="controls">
+						<%= f.password_field :password, :class => "password", :placeholder => "Password" %>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label"><b>Password (again)</b></label>
+					<div class="controls">
+						<%= f.password_field :password_repeat, :class => "password", :placeholder => "Password (again)" %>
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+						<%= f.submit "Sign Up", :class => "btn btn-primary" %>
+					</div>
+				</div>
+
+		</fieldset>
+		<%end%>
+	</div>
+</div>

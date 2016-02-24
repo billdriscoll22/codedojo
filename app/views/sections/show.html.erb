@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Subtitle:</b>
+  <%= @section.subtitle %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @section.content %>
+</p>
+
+<p>
+  <b>Index:</b>
+  <%= @section.index %>
+</p>
+
+<p>
+  <b>Tutorial:</b>
+  <%= @section.tutorial_id %>
+</p>
+
+<h3>Exercises</h3>
+
+<table class="table">
+  <tr>
+    <th>Index</th>
+    <th>Section</th>
+    <th>Content</th>
+  </tr>
+
+<% @section.exercises.each do |exercise| %>
+  <tr>
+    <td><%= link_to exercise do %>Exercise <%= exercise.index %><% end %></td>
+    <td><%= exercise.section_id %></td>
+    <td><%= truncate(exercise.content, :length => 80) %></td>
+  </tr>
+<% end %>
+</table>
+
+
+
+<%= link_to 'Edit', edit_section_path(@section) %> |
+<%= link_to 'Back', sections_path %>

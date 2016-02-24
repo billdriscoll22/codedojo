@@ -1,0 +1,61 @@
+<% @title = "Tutorials" %>
+<%= stylesheet_link_tag    "codedojo-tutorials", :media => "all" %>
+<%= javascript_include_tag "tutorial-ajax" %>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span2">
+			<div class="well well-small">
+				<form>
+					<label class="control-label" for="addTags"><b>Search Tags</b></label>
+					<div class="input-append" style="width: 100%">
+						<input id="tagText" type="text" class="span8" autocomplete="off" data-provide="typeahead" data-items="5" data-source='<%= @tags.to_json %>'>
+						<button type="button" class="btn" onclick="searchClick('')"><i class="icon-plus"></i></button>
+					</div>
+					<label class="control-label" for="categorySelect"><b>Category</b></label>
+					<select id="categorySelect" onchange="searchClick()">
+						<option>All</option>
+					<%
+						@categories.each do |category|
+					%>
+						<option value="<%= category.id %>"><%= category.name %></option>
+					<% end %>
+					</select>
+					<label class="control-label" for="difficultySelect"><b>Difficulty</b></label>
+					<select id="difficultySelect" onchange="searchClick('')">
+						<option value="All">All</option>
+						<option value="0">Beginner</option>
+						<option value="1">Advanced Beginner</option>
+						<option value="2">Competent</option>
+						<option value="3">Proficient</option>
+						<option value="4">Expert</option>
+					</select>
+					<label class="control-label" for="orderSelect"><b>Order</b></label>
+					<select id="orderSelect" onchange="searchClick('')">
+						<option value="rating">Highest Rating</option>
+						<option value="popularity">Most Popular</option>
+						<option value="recent">Most Recent</option>
+					</select>
+					<label class="checkbox" onclick="searchClick('')">
+						<input type="checkbox" id="isInverted"><b>Inverted</b>
+					</label>
+				</form>
+				<div class="btn-group btn-group-vertical" style="width: 100%">
+					<button class="btn btn-small btn-block" type="button" onclick="$('.collapse').collapse('hide')">Collapse All <i class="icon-minus"></i></button>				
+					<button class="btn btn-small btn-block" type="button" onclick="$('.collapse').collapse('show')">Expand All <i class="icon-resize-vertical"></i></button>
+				</div>
+			</div>
+		</div>
+		<div class="span8" id="tutorial-wrapper">
+			<%= render :partial => "tutorial_search_partial" %>
+		</div>
+	</div>
+</div>
+
+<br />
+<script type="text/javascript">
+  //<![CDATA[
+  	window.onload = function() {
+			xhr = new Ajaxhelper("tutorial-wrapper");
+  	}
+  //]]>
+</script>

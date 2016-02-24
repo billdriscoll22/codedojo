@@ -1,0 +1,47 @@
+
+.navbar-inner {
+  border-radius: 0px !important;
+}
+.navbar-avatar {
+  max-height: 30px;
+  position: relative;
+  bottom: -5px;
+}
+
+* {
+margin: 0;
+}
+html, body {
+height: 100%;
+}
+.wrapper {
+min-height: 100%;
+height: auto !important;
+height: 100%;
+margin: 0 auto -40px;
+}
+.footer, .push {
+height: 40px;
+}
+
+.footer a{
+	color: rgb(153, 153, 153)!important;
+}
+
+.footer a:hover{
+	text-decoration: none;
+}
+
+.footer{
+	background-color: #1b1b1b;
+	color: rgb(153, 153, 153);
+	line-height: 2.5;
+}
+
+.inset-text {
+  color: rgba(40, 40, 40, 0.8);
+  text-shadow: 1px 4px 6px #def, 0 0 0 #000, 1px 4px 6px #def;
+}
+#navbar {
+	/*width: 1170px;*/
+}

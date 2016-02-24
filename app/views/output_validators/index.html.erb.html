@@ -1,0 +1,27 @@
+<h1>Listing output_validators</h1>
+
+<table>
+  <tr>
+    <th>Args</th>
+    <th>Exercise</th>
+    <th>Validator</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @output_validators.each do |output_validator| %>
+  <tr>
+    <td><%= output_validator.args %></td>
+    <td><%= output_validator.exercise_id %></td>
+    <td><%= output_validator.validator %></td>
+    <td><%= link_to 'Show', output_validator %></td>
+    <td><%= link_to 'Edit', edit_output_validator_path(output_validator) %></td>
+    <td><%= link_to 'Destroy', output_validator, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Output validator', new_output_validator_path %>
